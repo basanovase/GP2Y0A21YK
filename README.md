@@ -22,7 +22,7 @@ Here's an example of how to use the GP2Y0A21YK library in your MicroPython proje
 from gp2y0a21yk import GP2Y0A21YK
 import machine
 
-# Initialize the sensor (assuming the sensor is connected to ADC pin 0) assumig
+# Initialize the sensor (assuming the sensor is connected to ADC pin 0)
 sensor = GP2Y0A21YK(0)
 sensor.begin(0)
 

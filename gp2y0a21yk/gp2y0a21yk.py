@@ -58,20 +58,23 @@ class GP2Y0A21YK:
         return self._distance_pin.read() if self._enabled else 1023
         
     def get_distance_volt(self):
-        return self._map_gp2y0a21yk_v(self.get_distance_raw())
+        sum_val = 0
+        for _ in range(self._average):
+            sum_val += self._map_gp2y0a21yk_v(self.get_distance_raw())
+        return sum_val // self._average
         
     def get_distance_centimeter(self):
-        return self._map_gp2y0a21yk_cm(self.get_distance_raw())
+        sum_val = 0
+        for _ in range(self._average):
+            sum_val += self._map_gp2y0a21yk_cm(self.get_distance_raw())
+        return sum_val // self._average
         
     def _map_gp2y0a21yk_v(self, value):
         return value * (3300 / 1023) if self._ref_voltage == 3.3 else value * (5000 / 1023)
         
     def _map_gp2y0a21yk_cm(self, value):
-        sum_val = 0
-        for _ in range(self._average):
-            index = value // 4
-            sum_val += self._transfer_function_lut(index)
-        return sum_val // self._average
+        index = value // 4
+        return self._transfer_function_lut(index)
         
     def _transfer_function_lut(self, index):
         lut = self.LUT_3V if self._ref_voltage == 3.3 else self.LUT_5V
